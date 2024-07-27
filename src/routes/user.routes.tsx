@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Profile from "../pages/Profile/Profile";
+import Cart from "../pages/shop/Cart";
 
 type TRoute = {
   path: string;
@@ -32,9 +33,9 @@ const userPaths = [
     element: <Dashboard />,
   },
   {
-    name: "Profile",
-    path: "profile",
-    element: <Profile />,
+    name: "Cart",
+    path: "cart",
+    element: <Cart />,
   },
 ];
 

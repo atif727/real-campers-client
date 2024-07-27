@@ -1,21 +1,33 @@
-import React from "react";
-import { Button, Layout, Menu } from "antd";
+import React, { useState } from "react";
+import { Button, Divider, Drawer, FloatButton, Layout, Menu } from "antd";
 import { NavLink, Outlet } from "react-router-dom";
 import { userSidebarItems } from "../../routes/user.routes";
 import { logout, useCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useSingleUserQuery } from "../../redux/features/auth/getUser";
 
 const { Header, Content } = Layout;
 
 const App: React.FC = () => {
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logout());
   };
   const user = useAppSelector(useCurrentUser);
   let buttonComponentsForUser;
+  let hidden;
   const username = user?.name;
-  if (user === null) {
+  const { data } = useSingleUserQuery(user?.email as string);
+  const userData = data?.data;
+  if (user === null || user === undefined) {
+    hidden = "hidden";
     buttonComponentsForUser = (
       <>
         <Button type="primary">
@@ -27,9 +39,13 @@ const App: React.FC = () => {
       </>
     );
   } else {
-    buttonComponentsForUser = <Button onClick={handleLogout}>Logout</Button>;
+    hidden = "";
+    buttonComponentsForUser = (
+      <>
+        <Button onClick={handleLogout}>Logout</Button>
+      </>
+    );
   }
-
   return (
     <Layout style={{ background: "white" }}>
       <Header
@@ -51,11 +67,38 @@ const App: React.FC = () => {
           style={{ flex: 1, minWidth: 0 }}
         />
         {buttonComponentsForUser}
-        <p className="ml-3">{username}</p>
+        <Button onClick={showDrawer} className={`ml-3 ${hidden}`} type="text">
+          {username}
+        </Button>
       </Header>
       <Content>
         <Outlet />
       </Content>
+      <FloatButton.BackTop />
+      <Drawer
+        title={`${username}'s Profile`}
+        onClose={onClose}
+        open={open}
+      >
+        <div className="text-2xl text-center">
+          <div>
+            <b>{userData?.name}</b>
+            <Divider style={{ fontSize: "20px" }}>Name</Divider>
+          </div>
+          <div>
+            <b>{userData?.email}</b>
+            <Divider style={{ fontSize: "20px" }}>Email</Divider>
+          </div>
+          <div>
+            <b>{userData?.address}</b>
+            <Divider style={{ fontSize: "20px" }}>Address</Divider>
+          </div>
+          <div>
+            <b>{userData?.phonenumber}</b>
+            <Divider style={{ fontSize: "20px" }}>Phone Number</Divider>
+          </div>
+        </div>
+      </Drawer>
     </Layout>
   );
 };

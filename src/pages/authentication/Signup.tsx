@@ -12,6 +12,8 @@ interface IFormInput {
   username: string;
   email: string;
   password: string;
+  address: string;
+  phonenumber: string;
 }
 
 const Signup: React.FC = () => {
@@ -25,11 +27,10 @@ const Signup: React.FC = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
+
   const [signup] = useSignupMutation();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -37,24 +38,26 @@ const Signup: React.FC = () => {
       name: data.username,
       email: data.email,
       password: data.password,
+      address: data.address,
+      phonenumber: data.phonenumber,
     };
-    const toastId = toast.loading("Logging in");
-    try{
+    const toastId = toast.loading("Signing up");
+    try {
       const res = await signup(userInfo)
-      .unwrap()
-      .catch((error) => {
-        if (error.status === 404) {
-          toast.error(error.data.message, { id: toastId, duration: 2000 });
-        }
+        .unwrap()
+        .catch((error) => {
+          if (error.status === 404) {
+            toast.error(error.data.message, { id: toastId, duration: 2000 });
+          }
+        });
+      const user = verifyToken(res.data.accessToken);
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+      toast.success(`Signed Up!, Welcome ${res.data.name}`, {
+        id: toastId,
+        duration: 2000,
       });
-    const user = verifyToken(res.data.accessToken);
-    dispatch(setUser({ user: user, token: res.data.accessToken }));
-    toast.success(`Signed Up!, Welcome ${res.data.name}`, {
-      id: toastId,
-      duration: 2000,
-    });
-    navigate("/home");
-    } catch(err){
+      navigate("/home");
+    } catch (err) {
       toast.error("something went wrong", { id: toastId, duration: 2000 });
     }
   };
@@ -126,6 +129,39 @@ const Signup: React.FC = () => {
             </p>
           )}
         </div>
+
+        <div className="mb-4">
+          <label className="block mb-1 font-bold text-gray-700">Address</label>
+          <input
+            {...register("address", {
+              required: "Address is required",
+            })}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.address && (
+            <p className="text-red-600 text-sm mt-1">
+              {errors.address.message}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-1 font-bold text-gray-700">
+            Phone Number
+          </label>
+          <input
+            {...register("phonenumber", {
+              required: "Phone Number is required",
+            })}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.phonenumber && (
+            <p className="text-red-600 text-sm mt-1">
+              {errors.phonenumber.message}
+            </p>
+          )}
+        </div>
+
         <p className="mb-2">Already have an account?</p>
         <NavLink to={"/signin"}>
           <Button className="mb-4">Log In</Button>
