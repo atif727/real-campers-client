@@ -52,7 +52,7 @@ const Signup: React.FC = () => {
         });
       const user = verifyToken(res.data.accessToken);
       dispatch(setUser({ user: user, token: res.data.accessToken }));
-      toast.success(`Signed Up!, Welcome ${res.data.name}`, {
+      toast.success(`Signed Up!, Welcome ${res.data.createdUser.name}`, {
         id: toastId,
         duration: 2000,
       });

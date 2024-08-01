@@ -1,14 +1,14 @@
 import Banner from "./Banner/Banner";
 import Companies from "./Companies/Companies";
-import Contact from "./Contact/Contact";
 import Footer from "./Footer/Footer";
+import Faq from "./faq/Faq";
 
 const Home = () => {
   return (
     <>
       <Banner />
       <Companies />
-      <Contact />
+      <Faq />
       <Footer />
     </>
   );

@@ -10,11 +10,11 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { useSingleProductQuery } from "../../redux/features/products/singleproduct";
-import ProductDescription from "./howtodescription";
+import ProductDescription from "../shop/howtodescription";
 
 const { Header, Content } = Layout;
 
-const Product: React.FC = () => {
+const ProductEdit: React.FC = () => {
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logout());
@@ -48,8 +48,8 @@ const Product: React.FC = () => {
     );
   } else {
     const product = data.data;
-    const color: string = product.color;
-    console.log(color)
+    let color: string = product.color;
+    color = color.toLowerCase();
     let stockTagAndCartButton;
     if (product.quantity === 0) {
       stockTagAndCartButton = (
@@ -121,13 +121,13 @@ const Product: React.FC = () => {
           <Divider className="md:hidden" />
           <div>
             <h1 className="text-5xl text-left font-bold">{product.name}</h1>
-            <h1 className="text-2xl mt-4 text-left ">{product.description}</h1>
+            <h1 className="text-2xl text-left ">{product.description}</h1>
             <div className="flex mt-5">
               <h1 className="text-2xl w-auto max-sm:w-32 text-left ">
                 <b>Category:</b> {product.category}
               </h1>
               <Divider className="h-auto" type="vertical" />
-              <h1 className={`text-2xl text-left text-${color.toLowerCase()}-500`}>
+              <h1 className={`text-2xl text-left text-${color}-500`}>
                 <b>Color:</b> <br className="md:hidden" /> {product.color}
               </h1>
             </div>
@@ -151,4 +151,4 @@ const Product: React.FC = () => {
   }
 };
 
-export default Product;
+export default ProductEdit;

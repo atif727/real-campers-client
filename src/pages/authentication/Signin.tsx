@@ -10,8 +10,6 @@ import { toast } from "sonner";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-
-
 AOS.init();
 
 interface IFormInput {
