@@ -10,7 +10,7 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { useSingleProductQuery } from "../../redux/features/products/singleproduct";
-import ProductDescription from "../shop/howtodescription";
+import EditProductForm from "./EditProductForm";
 
 const { Header, Content } = Layout;
 
@@ -37,8 +37,8 @@ const ProductEdit: React.FC = () => {
     buttonComponentsForUser = <Button onClick={handleLogout}>Logout</Button>;
   }
 
-  const { prodid } = useParams();
-  const { data } = useSingleProductQuery(prodid as string);
+  const prodid: string = useParams().prodid as string;
+  const { data } = useSingleProductQuery(prodid);
   // const data = undefined;
   if (data === undefined || data === null) {
     return (
@@ -112,39 +112,9 @@ const ProductEdit: React.FC = () => {
           {buttonComponentsForUser}
           <p className="ml-3">{username}</p>
         </Header>
-        <Content className="flex max-sm:flex-col justify-left gap-10 p-20 max-sm:p-10 md:h-[90vh]">
-          <Image
-            style={{ width: "500px", height: "500px" }}
-            src={product.imageUrl}
-          />
-          <Divider className="h-full max-sm:hidden" type="vertical" />
-          <Divider className="md:hidden" />
-          <div>
-            <h1 className="text-5xl text-left font-bold">{product.name}</h1>
-            <h1 className="text-2xl text-left ">{product.description}</h1>
-            <div className="flex mt-5">
-              <h1 className="text-2xl w-auto max-sm:w-32 text-left ">
-                <b>Category:</b> {product.category}
-              </h1>
-              <Divider className="h-auto" type="vertical" />
-              <h1 className={`text-2xl text-left text-${color}-500`}>
-                <b>Color:</b> <br className="md:hidden" /> {product.color}
-              </h1>
-            </div>
-            <h1 className="text-2xl text-left mt-5">
-              <b>Price: ৳</b>
-              {product.price}
-            </h1>
-            <h1 className="text-2xl text-left mt-1">
-              <b>Quantity: </b>
-              {product.quantity}
-            </h1>
-            {stockTagAndCartButton}
-            <h1 className="text-5xl text-left font-bold mt-14 mb-5">
-              {product.howtocare.header}
-            </h1>
-            <ProductDescription description={product.howtocare.description} />
-          </div>
+        <Content className="">
+          {/*  className="flex max-sm:flex-col justify-left gap-10 p-20 max-sm:p-10 md:h-[90vh]" */}
+          <EditProductForm productId={prodid} />
         </Content>
       </Layout>
     );
