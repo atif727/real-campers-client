@@ -136,7 +136,7 @@ const Product: React.FC = () => {
               {product.price}
             </h1>
             <h1 className="text-2xl text-left mt-1">
-              <b>Quantity: </b>
+              <b>Quantity Remaining: </b>
               {product.quantity}
             </h1>
             {stockTagAndCartButton}

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useUpdateProductMutation } from "../../redux/features/products/updateProduct";
 import { useSingleProductQuery } from "../../redux/features/products/singleproduct";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 type howtocare = { header: string; description: string };
 
 type productType = {
@@ -29,6 +29,7 @@ type EditProductFormProps = {
 };
 
 const EditProductForm: React.FC<EditProductFormProps> = ({ productId }) => {
+    const navigate = useNavigate();
   const { data, isLoading } = useSingleProductQuery(productId);
   const [updateProduct] = useUpdateProductMutation();
 
@@ -128,20 +129,22 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ productId }) => {
     console.log(newProduct);
     const toastId = toast.loading("Adding product");
     try {
-        const prop = { body: newProduct, id: productId }
+      const prop = { body: newProduct, id: productId };
       const res = await updateProduct(prop)
         .unwrap()
         .catch((error) => {
           if (error) {
             toast.error(error.data.message, { id: toastId, duration: 2000 });
-          } else {
-            toast.success("Product Updated Successfully", {
-              id: toastId,
-              duration: 2000,
-            });
           }
         });
-      console.log(res);
+      if (res.success === true) {
+        toast.success("Product Updated Successfully", {
+          id: toastId,
+          duration: 2000,
+        });
+        navigate("/dashboard")
+      }
+    //   console.log(res);
     } catch (err) {
       toast.error("something went wrong", { id: toastId });
       console.log(err);
@@ -152,7 +155,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ productId }) => {
     <div>
       <Alert
         className="text-center font-bold md:mb-3 max-sm:p-3"
-        message="Do not keep any fields empty, if you accidentally change something, just undo it or change according to your need"
+        message="Do not keep any fields empty, if you accidentally change something, just undo it or change according to your need, also reload after submitting your changes"
         type="warning"
       />
       <form

@@ -1,6 +1,6 @@
 import { useAllProductsQuery } from "../../redux/features/products/allProducts";
 import { NavLink } from "react-router-dom";
-import { Button, Card, Empty, GetProps, Input, Spin } from "antd";
+import { Card, Empty, GetProps, Input, Spin } from "antd";
 import Search from "antd/es/input/Search";
 import { useState } from "react";
 
@@ -75,7 +75,7 @@ const Shop = () => {
                 data-aos="zoom-out"
                 key={prod.name}
                 hoverable
-                style={{ width: 300, height: 550 }}
+                style={{ width: 300, height: 500 }}
                 cover={
                   <img
                     className="p-5 h-80"
@@ -83,11 +83,6 @@ const Shop = () => {
                     alt={prod.name}
                   />
                 }
-                actions={[
-                  <Button className="text-orange-500 text-xl" type="link">
-                    Details
-                  </Button>,
-                ]}
               >
                 <p className="text-lg font-bold">{prod.name}</p>
                 <p className="mt-1 text-base font-light">{prod.description}</p>

@@ -11,4 +11,5 @@ const allProductsApi = baseApi.injectEndpoints({
   }),
 });
 
+
 export const { useAllProductsQuery } = allProductsApi;

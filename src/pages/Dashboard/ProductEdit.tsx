@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Layout, Menu, Spin, Divider, Image, Tag } from "antd";
+import { Button, Layout, Menu, Spin, Tag } from "antd";
 import { NavLink, useParams } from "react-router-dom";
 import { userSidebarItems } from "../../routes/user.routes";
 import { logout, useCurrentUser } from "../../redux/features/auth/authSlice";

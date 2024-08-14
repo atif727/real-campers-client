@@ -67,22 +67,23 @@ const AddProductForm = () => {
       rating: data.rating,
     };
     const toastId = toast.loading("Adding product");
-    try {
-      await createProduct(newProduct)
-        .unwrap()
-        .catch((error) => {
-          if (error) {
-            toast.error(error.data.message, { id: toastId, duration: 2000 });
-          } else {
-            toast.success("Product Added Successfully", {
-              id: toastId,
-              duration: 2000,
-            });
-          }
-        });
-    } catch (err) {
-      toast.error("something went wrong", { id: toastId });
-      console.log(err);
+
+    const res = await createProduct(newProduct)
+      .unwrap()
+      .catch((error) => {
+        if (error) {
+          toast.error(error.data.message, { id: toastId, duration: 2000 });
+        }
+      });
+
+    if (res.success === true) {
+      toast.success("Product Added Successfully", {
+        id: toastId,
+        duration: 2000,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
     }
   };
 

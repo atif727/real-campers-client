@@ -2,13 +2,11 @@ import { Button, Drawer, Popover, Spin, Table } from "antd";
 import ProtectedRoute from "../../components/layout/ProtectedRoute";
 import { useAllProductsQuery } from "../../redux/features/products/allProducts";
 import { NavLink } from "react-router-dom";
-import {
-  ExclamationCircleFilled,
-  PlusSquareFilled,
-} from "@ant-design/icons";
+import { ExclamationCircleFilled, PlusSquareFilled } from "@ant-design/icons";
 import { useState } from "react";
 import AddProductForm from "./AddProductForm";
 import type { ColumnsType } from "antd/es/table";
+import { useDeleteProductMutation } from "../../redux/features/products/deleteProduct";
 
 type howtocare = { header: string; description: string };
 
@@ -47,6 +45,8 @@ const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
 
+  const [deleteProduct] = useDeleteProductMutation();
+
   const showDrawer = () => {
     setOpenDrawer(true);
   };
@@ -80,6 +80,10 @@ const Dashboard = () => {
       });
     });
 
+    function deleteandReload(id: string) {
+      deleteProduct(id);
+      window.location.reload();
+    }
     const columns: ColumnsType<DataType> = [
       {
         title: "Name",
@@ -120,11 +124,14 @@ const Dashboard = () => {
                     <h1>This will permanently delete the product</h1>
                   </div>
                   <div className="mt-2">
-                    <Button onClick={() => setOpenPopoverId(null)} className="rounded-lg">
+                    <Button
+                      onClick={() => setOpenPopoverId(null)}
+                      className="rounded-lg"
+                    >
                       Close
                     </Button>
                     <Button
-                      onClick={() => setOpenPopoverId(null)}
+                      onClick={() => deleteandReload(id)}
                       className="rounded-lg ml-2"
                       danger
                       type="primary"
@@ -134,12 +141,16 @@ const Dashboard = () => {
                   </div>
                 </>
               }
-              title={<h1 className="text-lg font-bold text-left">Are you sure ?</h1>}
+              title={
+                <h1 className="text-lg font-bold text-left">Are you sure ?</h1>
+              }
               trigger="click"
               open={openPopoverId === id}
               onOpenChange={() => handleOpenChange(id)}
             >
-              <Button className="ml-2" danger type="dashed">Delete</Button>
+              <Button className="ml-2" danger type="dashed">
+                Delete
+              </Button>
             </Popover>
           </>
         ),
@@ -158,7 +169,11 @@ const Dashboard = () => {
             <PlusSquareFilled />
             Add Products
           </Button>
-          <Table columns={columns} dataSource={dataSource} sticky={{ offsetHeader: 64 }} />
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            sticky={{ offsetHeader: 64 }}
+          />
         </div>
         <Drawer
           placement="bottom"
